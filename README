@@ -1,0 +1,12 @@
+django-beanstalk
+
+== Description
+An admin app that allows you to manage a beanstalkd server.
+You can browse tubes and see the stats. You can release jobs and so on.
+See: http://xph.us/software/beanstalkd/
+
+== Authors
+ * Alexandru Plugaru (alexandru.plugaru@gmail.com)
+ 
+== Licence
+GPLv2
