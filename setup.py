@@ -8,7 +8,7 @@ setup(
     author='Alexandru Plugaru',
     author_email='alexandru.plugaru@gmail.com',
     url='http://github.com/humanfromearth/django-beanstalk',
-    license='GPLv2',
+    license='GPLv3',
     packages=['django_beanstalk'],
     install_requires=['beanstalkc'],
 )
