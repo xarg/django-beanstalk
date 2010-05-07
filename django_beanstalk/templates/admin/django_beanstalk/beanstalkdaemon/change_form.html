@@ -16,8 +16,8 @@
 {% block breadcrumbs %}{% if not is_popup %}
 <div class="breadcrumbs">
      <a href="../../../">{% trans "Home" %}</a> &rsaquo;
-     <a href="../../">{{ app_label|capfirst|escape }}</a> &rsaquo; 
-     {% if has_change_permission %}<a href="../">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %} &rsaquo; 
+     <a href="../../">{{ app_label|capfirst|escape }}</a> &rsaquo;
+     {% if has_change_permission %}<a href="../">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %} &rsaquo;
      {% if add %}{% trans "Add" %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}
 </div>
 {% endif %}{% endblock %}
@@ -64,21 +64,7 @@
 
 </div>
 </form>
-
 {% block extrablock %}
-     <!-- Daemon's tubes and stats -->
-     <div id="tubes">
-          <h3>{% trans "Tubes" %}</h3>
-     {% if tubeerror %}<p class="error">Error: {{tubeerror}}</p>{% endif %}
-     {% if tubes %}
-     <ul id="tubes-list">
-     {% for tubename in tubes %}
-          <li><a href="{%url admin:tube object_id tubename %}">{{tubename}}</a></li>
-     {% endfor %}
-     
-     </ul>
-     {% endif %}
-     </div>
      <!-- View stats -->
      {% if stats %}
      <div id="stats">
@@ -91,10 +77,21 @@
                     <td>{% if key == 'uptime' %}{{ value|timesince }}{% else %}{{ value }}{% endif %}</td>
                </tr>
                {% endfor %}
-          </table>  
+          </table>
      </div>
      {% endif %}
+     <!-- Daemon's tubes and stats -->
+     <div id="tubes">
+          <h3>{% trans "Tubes" %}</h3>
+     {% if tubeerror %}<p class="error">Error: {{tubeerror}}</p>{% endif %}
+          {% if tubes %}
+          <ul id="tubes-list">
+          {% for tubename in tubes %}
+               <li><a href="{%url admin:tube object_id tubename %}">{{tubename}}</a></li>
+          {% endfor %}
+          </ul>
+          {% endif %}
+     </div>
 {% endblock %}
-
 </div>
 {% endblock %}

@@ -15,15 +15,80 @@
 
 {% block breadcrumbs %}{% if not is_popup %}
 <div class="breadcrumbs">
-     <a href="../../../">{% trans "Home" %}</a> &rsaquo;
-     <a href="../../">{{ app_label|capfirst|escape }}</a> &rsaquo;
-     {% if has_change_permission %}<a href="../">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %} &rsaquo;
-     {% if add %}{% trans "Add" %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+     <a href="../../../../">{% trans "Home" %}</a> &rsaquo;
+     <a href="../../../">{{ app_label|capfirst|escape }}</a> &rsaquo;
+     <a href="../../">{{ opts.verbose_name_plural|capfirst }}</a> &rsaquo;
+     <a href="../../{{beanstalk_daemon_pk}}">{% if add %}{% trans "Add" %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}</a> &rsaquo;
+     {{name}}
 </div>
 {% endif %}{% endblock %}
 
 {% block content %}
+<h1>{% trans "Tube" %}: {{name}}</h1>
 <div id="content-main">
+    <!-- Add new job form -->
+    <form method="post" action="">{% csrf_token %}
+        <fieldset class="module aligned">
+            <legend style="margin-left: 20px; font-size: 1.2em; font-weight: bold;">{% trans "Add new job" %}</legend>
+            <div class="form-row body">
+                <div>
+                    {{form}}
+                </div>
+            </div>
+        </fieldset>
+        <div class="submit-row">
+            <input type="submit" value="Save" class="default" name="_save">
+        </div>
+    </form>
+    <!-- View stats -->
+    {% if stats %}
+    <div id="stats">
+        <h3>{% trans "Stats" %}</h3>
+        <table>
+            <thead>
+                <tr><th>{% trans "Key"%}</th><th>{% trans "Value" %}</th></tr>
+            </thead>
+            <tbody>
+                {% for key, value in stats %}
+                <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
 
+    <!-- Jobs -->
+    {% if jobs %}
+    <div id="jobs">
+        <h3>{% trans "Jobs" %}</h3>
+        <em class="help_text">{% trans "Unfortunatly the beanstalk daemon can only show the latest job of a given state"%}</em>
+        <p>&nbsp;</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>{% trans "id" %}</th>
+                    <th>{% trans "State" %}</th>
+                    <th>{% trans "Date/Age" %}</th>
+                    <th>{% trans "Body" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for job in jobs %}
+                <tr>
+                    <td>{{job.id}}</td>
+                    <td>{{job.state}}</td>
+                    <td>{{job.age}} / {{job.age|timesince}}</td>
+                    <td>{{job.body}}</td>
+                    <td>
+                        <a href="{%url admin:job beanstalk_daemon_pk name job.id 'delete' %}" class="delete">delete</a> |
+                        <a href="{%url admin:job beanstalk_daemon_pk name job.id 'kick' %}" class="delete">kick</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
