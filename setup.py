@@ -27,5 +27,4 @@ setup(
         'django (>=1.2)',
         'beanstalkc'
     ],
-    zip_safe = True
 )
